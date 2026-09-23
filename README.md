@@ -1,4 +1,4 @@
-# 🛡️ ParakhAI: AI-Powered Legal Metrology Compliance System
+# ParakhAI: AI-Powered Legal Metrology Compliance System
 
 *Smart India Hackathon (SIH) 2026 | Problem Statement ID: SIH26034*
 
@@ -6,31 +6,31 @@
 
 ---
 
-## 📖 About the Project
+## About the Project
 *ParakhAI* is an intelligent, AI-driven software ecosystem designed to automate the inspection and compliance verification of packaged commodities under the *Legal Metrology (Packaged Commodities) Rules, 2011*. 
 
 By combining advanced OCR, Computer Vision, and a deterministic rule engine, Parakh empowers Legal Metrology Inspectors, Manufacturers, and Regulatory Authorities to detect label violations, geo-tag fraud, and generate court-admissible digital reports in seconds—shifting from a 10-minute manual process to a 15-second automated workflow.
 
 ---
 
-## 🎯 Problem Statement
+## Problem Statement
 *SIH26034:* Software System to check compliance of Packaged Commodities under Legal Metrology (Packaged Commodities) Rules, 2011 by scanning products, images, and labels.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🤖 Core AI & Compliance
+### Core AI & Compliance
 *   *Intelligent Label Analysis (ParakhAI):* Uses OCR + Custom AI to understand product labels, converting unstructured package images into structured data.
 *   *Rule-Based Compliance Engine:* Automatically applies Legal Metrology rules, amendments, and category-specific requirements to detect missing or incorrect declarations.
 *   *Hybrid OCR Engine:* Combines *Tesseract 5.0* (for offline/edge processing) and *Google Vision API* (for complex/cloud processing) to achieve 95%+ text extraction accuracy.
 
-### 📱 Inspector-Centric Workflow
+### Inspector-Centric Workflow
 *   *Seamless Flow:* Capture  Verify ➔ Review ➔ Report from a single unified platform.
 *   *Geo-Tagging of Violations:* Captures exact GPS coordinates alongside photographic evidence to identify geographic fraud hotspots.
 *   *Offline-First Architecture:* Inspectors can store evidence locally in remote areas and auto-sync when connectivity returns.
 
-### 🛡️ Security & Advanced Features
+### Security & Advanced Features
 *   *Blockchain Audit Trail:* Generates tamper-proof, hash-locked PDF reports (SHA-256) for court-admissible evidence.
 *   *Role-Based Access Control (RBAC):* Tailored dashboards for Inspectors, Manufacturers, Importers, and Admins.
 *   *Smart Route Planner:* Analytics dashboard showing Green/Red pins for regional compliance trends.
@@ -38,7 +38,7 @@ By combining advanced OCR, Computer Vision, and a deterministic rule engine, Par
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Category | Technologies Used |
 | :--- | :--- |
@@ -51,7 +51,7 @@ By combining advanced OCR, Computer Vision, and a deterministic rule engine, Par
 
 ---
 
-## 🏗️ System Architecture & Workflow
+## System Architecture & Workflow
 
 Parakh utilizes a *Microservices Architecture* to ensure high scalability and zero UI lag during heavy AI processing:
 
@@ -63,7 +63,7 @@ Parakh utilizes a *Microservices Architecture* to ensure high scalability and ze
 
 ---
 
-## 🚀 Installation & Local Setup
+##  Installation & Local Setup
 
 ### Prerequisites
 *   Node.js (v16+)
@@ -71,31 +71,47 @@ Parakh utilizes a *Microservices Architecture* to ensure high scalability and ze
 *   PostgreSQL
 
 ### 1. Clone the Repository
-bash
-git clone https://github.com/abuzaraq3/parakhAI.git
-cd parakhAI
 
+'''bash
+
+git clone https://github.com/abuzaraq3/parakhAI.git
+
+cd parakhAI
+'''
 
 ### 2. Backend Setup (Django)
+
 bash
+
 cd backend
+
 python -m venv venv
+
 linux: source venv/bin/activate | Windows: venv\Scripts\activate
+
 pip install -r requirements.txt
+
+python manage.py makemigrations
 python manage.py migrate
+
 python manage.py runserver
+'''
 
 
 ### 3. Frontend Setup (React/Next.js)
-bash
-cd frontend
-npm install
-npm run dev
 
+'''bash
+
+cd frontend
+
+npm install
+
+npm run dev
+'''
 
 ---
 
-## 🌍 Impact & Benefits
+## Impact & Benefits
 
 *   *Social:* Protects 1.4 billion Indians from underweight, overpriced, and expired goods. Eliminates "short-weighing" fraud.
 *   *Economic:* Reduces inspection costs. Prevents annual consumer revenue leakage.
@@ -104,7 +120,7 @@ npm run dev
 
 ---
 
-## 📚 Research & References
+## Research & References
 
 1.  *Legal Metrology Act, 2009* & *Packaged Commodities Rules, 2011* - Govt. of India
 2.  *Department of Consumer Affairs Annual Report 2024-25*
@@ -114,19 +130,15 @@ npm run dev
 
 ---
 
-##  Team Parakh
+## Team Pramaan
 
 | Name | Role | GitHub | LinkedIn |
 | :--- | :--- | :--- | :--- |
-| *[Ali]* | Team Lead / ML Engineer | [@username](#) | [@username](#) |
-| *[Owais]* | Backend Developer | [@username](#) | [@username](#) |
-| *[Aarna]* | Frontend Developer | [@username](#) | [@username](#) |
-| *[Mansi]* | Backend / Database | [@username](#) | [@username](#) |
-| *[Anshika]* | R&D / AI Researcher | [@username](#) | [@username](#) |
+| *[Ali]* | Team Lead / ML Engineer | [@Alishad01](https://github.com/Alishad01) | [@username](#) |
+| *[Shahabuzar]* | Backend Lead | [@AbuzarAQ3](https://github.com/AbuzarAQ3) | [@username](#) |
+| *[Owais]* | Frontend Lead | [@Owaisraza-02qalad](https://github.com/anshikatiwari064-droid) | [@username](#) |
+| *[Aarna]* | Frontend Developer | [@aarnatiwariwhs-blip](https://github.com/aarnatiwariwhs-blip) | [@username](#) |
+| *[Mansi]* | Backend Developer | [@mansi-sharma123](https://github.com/mansi-sharma123) | [@username](#) |
+| *[Anshika]* | R&D / AI Researcher | [@anshikatiwari064-droid](https://github.com/anshikatiwari064-droid) | [@username](#) |
 
 ---
-
-## 📄 License
-This project is developed for the *Smart India Hackathon 2026* and is intended for educational and governmental deployment purposes. 
-
-Built with ❤️ by Team Parakh for a stronger, fairer India. 🇮🇳
