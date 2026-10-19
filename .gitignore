@@ -225,3 +225,6 @@ secrets.json
 # Docker 
 # meh not containarized yet, soon enough
 # pg_data/
+
+.github
+.github/s
