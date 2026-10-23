@@ -12,11 +12,11 @@ import { ProfilePage } from "./features/profile/ProfilePage";
 
 const queryClient = new QueryClient();
 
-export const App: React.FC = () => {
+export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col bg-slate-100 text-slate-900 font-sans selection:bg-blue-600 selection:text-white">
+        <div className="min-h-screen flex flex-col bg-[#f4f6f9] text-slate-900 font-sans selection:bg-blue-600 selection:text-white">
           <Navbar />
           <main className="flex-1">
             <Routes>

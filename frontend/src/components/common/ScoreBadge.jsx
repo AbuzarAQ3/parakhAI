@@ -1,26 +1,20 @@
 import React from "react";
 
-interface ScoreBadgeProps {
-  score: number;
-  size?: "sm" | "md" | "lg";
-  showLabel?: boolean;
-}
-
-export const ScoreBadge: React.FC<ScoreBadgeProps> = ({
-  score,
-  size = "md",
-  showLabel = true,
-}) => {
-  const rounded = Math.round(score);
+export const ScoreBadge = ({ score = 100, size = "md", showLabel = true }) => {
+  const rounded = Math.round(Number(score) || 0);
 
   let colorClasses = "text-emerald-700 bg-emerald-50 border-emerald-200";
   let ringColor = "stroke-emerald-600";
+  let labelText = "Statutory Compliance Met";
+
   if (rounded < 60) {
     colorClasses = "text-rose-700 bg-rose-50 border-rose-200";
     ringColor = "stroke-rose-600";
+    labelText = "Legal Notice Trigger / High Risk";
   } else if (rounded < 85) {
     colorClasses = "text-amber-700 bg-amber-50 border-amber-200";
     ringColor = "stroke-amber-600";
+    labelText = "Requires Inspector Verification";
   }
 
   if (size === "lg") {
@@ -59,7 +53,7 @@ export const ScoreBadge: React.FC<ScoreBadgeProps> = ({
         </div>
         {showLabel && (
           <span className="mt-2 text-xs font-semibold text-slate-600">
-            {rounded >= 85 ? "Statutory Compliance Met" : rounded >= 60 ? "Requires Verification" : "Legal Notice Trigger"}
+            {labelText}
           </span>
         )}
       </div>
