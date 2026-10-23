@@ -1,6 +1,6 @@
-# Multi-stage Dockerfile for Parakh AI React Frontend
+# Multi-stage Dockerfile for Parakh AI React Frontend (JavaScript/JSX)
 
-# Stage 1: Build React + TypeScript bundle
+# Stage 1: Build React + Vite bundle
 FROM node:20-alpine AS builder
 
 WORKDIR /app
