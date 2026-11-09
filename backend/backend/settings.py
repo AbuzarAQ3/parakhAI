@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 from corsheaders.defaults import default_headers
@@ -33,6 +34,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+# Add this right below your ALLOWED_HOSTS assignment line:
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,6 +50,8 @@ INSTALLED_APPS = [
     
     # packages and services
     'rest_framework',
+
+    'drf_spectacular',
     
     'allauth',
     'allauth.account',
@@ -99,13 +105,27 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASE
+POSTGRES_DB = os.getenv("POSTGRES_DB", "False").lower() == "true"
 
+if POSTGRES_DB:
+    DATABASES = {
+        "default": {
+        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.postgresql"),
+        "NAME": os.getenv("DB_NAME", ""),
+        "USER": os.getenv("DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
@@ -131,7 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
@@ -162,18 +182,24 @@ MAILERS = {
     },
 }
 
-# django rest_framework config
+# User model
+AUTH_USER_MODEL = 'users.User'
+
+# REST framework config
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # "DEFAULT_PAGINATION_CLASS": "common.pagination.StandardResultsSetPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+    "EXCEPTION_HANDLER": "common.exceptions.custom_exception_handler",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "allauth.headless.contrib.rest_framework.authentication.XSessionTokenAuthentication",
     ],
 }
-
-
-# User model
-AUTH_USER_MODEL = 'users.User'
-
-# LOGIN_URL = 'login'
 
 # django-allauth config
 AUTHENTICATION_BACKENDS = ("allauth.account.auth_backends.AuthenticationBackend",)
@@ -196,7 +222,7 @@ HEADLESS_FRONTEND_URLS = {
 HEADLESS_TOKEN_STRATEGY = "allauth.headless.tokens.strategies.sessions.SessionTokenStrategy"
 HEADLESS_SERVE_SPECIFICATION = True
 
-# cores config
+# CORS config
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
@@ -208,3 +234,15 @@ CORS_ALLOW_HEADERS = [
     "x-email-verification-key", # email verification
     "x-password-reset-key",     # password reset
 ]
+
+# OpenAPI Docs (drf-spectacular)
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Parakh AI - Legal Metrology Inspection API",
+    "DESCRIPTION": (
+        "REST API for automated AI-assisted Legal Metrology compliance inspection "
+        "of packaged commodities under the Legal Metrology (Packaged Commodities) Rules, 2011."
+    ),
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+}

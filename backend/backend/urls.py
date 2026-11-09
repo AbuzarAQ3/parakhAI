@@ -16,16 +16,62 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
+class HealthCheckView(APIView):
+    """Liveness probe: verifies that the web service is responsive."""
+    def get(self, request):
+        return Response({
+            "status": "healthy",
+            "service": "parakh-ai-backend",
+        }, status=status.HTTP_200_OK)
+
+class ReadinessCheckView(APIView):
+    """Readiness probe: verifies database connectivity and engine status."""
+    def get(self, request):
+        from django.db import connection
+        db_healthy = False
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT 1")
+                row = cursor.fetchone()
+                db_healthy = row[0] == 1
+        except Exception:
+            db_healthy = False
+
+        if db_healthy:
+            return Response({
+                "status": "ready",
+                "database": "connected",
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "status": "not_ready",
+            "database": "unavailable",
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path("health/", HealthCheckView.as_view(), name="api-health"),
+    path("ready/", ReadinessCheckView.as_view(), name="api-ready"),
     
-    path('', include('core.urls')),
+    path('core/', include('core.urls')),
 
     path('api/', include('rest_framework.urls')),
+    # OpenAPI schema & Swagger documentation
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 
     # django-allauth urls
-    path('accounts/', include('allauth.urls')),
     path('_allauth/', include('allauth.headless.urls')),
-
+    
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
