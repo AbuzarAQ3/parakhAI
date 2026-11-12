@@ -62,7 +62,11 @@ INSTALLED_APPS = [
     
     # apps
     'core',
+    'reports',
+    'products',
     'users',
+    'inspectors',
+    'supervisor',
 ]
 
 MIDDLEWARE = [

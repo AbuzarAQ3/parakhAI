@@ -61,6 +61,10 @@ urlpatterns = [
     path("ready/", ReadinessCheckView.as_view(), name="api-ready"),
     
     path('core/', include('core.urls')),
+    path('reports/', include('reports.urls')),
+    path('products/', include('products.urls')),
+    path('inspectors/', include('inspectors.urls')),
+    path('supervisor/', include('supervisor.urls')),
 
     path('api/', include('rest_framework.urls')),
     # OpenAPI schema & Swagger documentation
