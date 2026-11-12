@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import Inspector
+from .models import InspectorModel
 
 
 class InspectorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Inspector
+        model = InspectorModel
         fields = [
             "id",
             "name",

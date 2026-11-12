@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class Supervisor(models.Model):
+class SupervisorModel(models.Model):
     DUTY_STATUS_CHOICES = [
         ("ON_DUTY", "On Duty / Active"),
         ("OFF_DUTY", "Off Duty"),
@@ -20,7 +20,7 @@ class Supervisor(models.Model):
         max_length=255,
         default="Department of Consumer Affairs, Legal Metrology Division",
     )
-    supervisor_id = models.CharField(max_length=64, unique=True, default="INSP-UP-KN-4421")
+    supervisor_id = models.CharField(max_length=64, unique=True)
     badge_number = models.CharField(max_length=64, default="LM-9942")
     jurisdiction = models.CharField(max_length=255, default="Kanpur Nagar, Uttar Pradesh (Zone 4)")
     phone = models.CharField(max_length=32, default="+91 94150 12844")

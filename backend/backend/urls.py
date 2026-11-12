@@ -57,8 +57,8 @@ class ReadinessCheckView(APIView):
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path("health/", HealthCheckView.as_view(), name="api-health"),
-    path("ready/", ReadinessCheckView.as_view(), name="api-ready"),
+    path("api/v1/health/", HealthCheckView.as_view(), name="api-health"),
+    path("api/v1/ready/", ReadinessCheckView.as_view(), name="api-ready"),
     
     path('core/', include('core.urls')),
     path('reports/', include('reports.urls')),

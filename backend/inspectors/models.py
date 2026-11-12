@@ -20,7 +20,7 @@ class InspectorModel(models.Model):
         max_length=255,
         default="Department of Consumer Affairs, Legal Metrology Division",
     )
-    inspector_id = models.CharField(max_length=64, unique=True, default="INSP-UP-KN-4421")
+    inspector_id = models.CharField(max_length=64, unique=True)
     badge_number = models.CharField(max_length=64, default="LM-9942")
     jurisdiction = models.CharField(max_length=255, default="Kanpur Nagar, Uttar Pradesh (Zone 4)")
     phone = models.CharField(max_length=32, default="+91 94150 12844")
