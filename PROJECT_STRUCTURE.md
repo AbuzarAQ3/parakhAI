@@ -1,3 +1,4 @@
+```text
 parakhai/
 ├── backend/
 │   ├── manage.py
@@ -39,3 +40,4 @@ parakhai/
 ├── docker-compose.yml
 ├── README.md
 └── .gitignore
+```
