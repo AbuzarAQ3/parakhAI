@@ -2,9 +2,162 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==============================================================================
+   PARAKH AI - COLOR THEME SYSTEM
+   
+   EASY CUSTOMIZATION GUIDE:
+   - To tweak colors, edit the hex values inside the active theme below.
+   - To add a BRAND NEW theme:
+     1. Copy one of the blocks (e.g. [data-theme="my-custom"])
+     2. Paste it below and set your desired hex values
+     3. Add the theme id to `frontend/src/utils/theme.js`
+   ============================================================================== */
+
+/* Standard Departmental Theme: Blue, Grey & White (Light Mode) */
+:root, [data-theme="blue-grey-white"], [data-theme="light"], [data-theme="white-grey"], [data-theme="silver-dark"], [data-theme="earthy"], [data-theme="slate"] {
+  --parakh-bg: #F1F5F9;          /* Cool Grey Canvas with Subtle Blue Undertone */
+  --parakh-card: #FFFFFF;        /* Pristine White Surfaces & Cards */
+  --parakh-card-hover: #F8FAFC;  /* Soft Hover Surface */
+  --parakh-border: #E2E8F0;      /* Crisp Light Slate Border */
+  --parakh-text: #0F172A;        /* Deep Slate Navy Text */
+  --parakh-muted: #64748B;       /* Cool Slate Secondary Text */
+  --parakh-primary: #2563EB;     /* Vibrant Royal Blue Accent */
+  --parakh-primary-hover: #1D4ED8; /* Deep Royal Blue Hover */
+  --parakh-success: #059669;     /* Emerald Success (Green) */
+  --parakh-warning: #D97706;     /* Amber Warning */
+  --parakh-danger: #DC2626;      /* Crimson Danger */
+}
+
+/* Dark Mode Theme */
+.dark, [data-theme="dark"] {
+  --parakh-bg: #0B1120;          /* Deep Slate / Midnight Canvas */
+  --parakh-card: #1E293B;        /* Polished Dark Slate Cards */
+  --parakh-card-hover: #273549;  /* Hover Surface */
+  --parakh-border: #334155;      /* Crisp Dark Slate Borders */
+  --parakh-text: #F8FAFC;        /* Crisp Bright White Text */
+  --parakh-muted: #94A3B8;       /* Slate-400 Secondary Text */
+  --parakh-primary: #3B82F6;     /* High Contrast Vivid Blue Accent */
+  --parakh-primary-hover: #60A5FA; /* Sky Blue Hover Accent */
+  --parakh-success: #10B981;     /* Emerald Success */
+  --parakh-warning: #F59E0B;     /* Amber Warning */
+  --parakh-danger: #EF4444;      /* Crimson Danger */
+}
+
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: #f1f5f9;
-  color: #0f172a;
+  background-color: var(--parakh-bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(219, 234, 254, 0.55) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(226, 232, 240, 0.65) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--parakh-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent horizontal overflow on mobile */
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark body, html.dark body, [data-theme="dark"] body {
+  background-color: var(--parakh-bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.85) 0px, transparent 50%);
+  color: var(--parakh-text);
+}
+
+/* Polished Scrollbar that reacts to theme variables */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--parakh-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--parakh-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--parakh-muted);
+}
+
+/* Ensure viewport meta prevents zoom on iOS inputs */
+@supports (padding: env(safe-area-inset-bottom)) {
+  :root {
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sat: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* Bottom nav safe area spacing for page content */
+@media (max-width: 639px) {
+  .main-content-area {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Force 16px minimum on inputs to prevent iOS zoom */
+@media (max-width: 767px) {
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="number"],
+  input[type="password"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Touch target minimum sizing utility */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Leaflet map touch improvements */
+.leaflet-container {
+  touch-action: pan-x pan-y;
+}
+
+.leaflet-control-zoom a {
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  font-size: 18px !important;
+}
+
+@media (max-width: 639px) {
+  .leaflet-control-zoom a {
+    width: 40px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+  }
+}
+
+/* Custom scrollbar for mobile filter sheets */
+.filter-sheet-content {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Prevent body scroll when modal/sheet is open */
+body.sheet-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Bottom navigation transition */
+.bottom-nav-item {
+  transition: color 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.92);
 }

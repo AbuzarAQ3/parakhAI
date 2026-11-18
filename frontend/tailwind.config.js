@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -8,14 +9,19 @@ export default {
     extend: {
       colors: {
         parakh: {
-          blue: "#1d4ed8", // royal blue primary actions
-          dark: "#0f172a", // dark navy text
-          bg: "#f1f5f9",   // light blue-gray background
-          card: "#ffffff", // clean white cards
-          border: "#e2e8f0",
-          success: "#16a34a",
-          warning: "#d97706",
-          danger: "#dc2626",
+          bg: "var(--parakh-bg)",
+          card: "var(--parakh-card)",
+          cardHover: "var(--parakh-card-hover)",
+          border: "var(--parakh-border)",
+          blue: "var(--parakh-primary)",
+          primary: "var(--parakh-primary)",
+          primaryHover: "var(--parakh-primary-hover)",
+          dark: "var(--parakh-text)",
+          text: "var(--parakh-text)",
+          muted: "var(--parakh-muted)",
+          success: "var(--parakh-success)",
+          warning: "var(--parakh-warning)",
+          danger: "var(--parakh-danger)",
         },
       },
       fontFamily: {

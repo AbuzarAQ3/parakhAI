@@ -3,17 +3,17 @@ import React from "react";
 export const ScoreBadge = ({ score = 100, size = "md", showLabel = true }) => {
   const rounded = Math.round(Number(score) || 0);
 
-  let colorClasses = "text-emerald-700 bg-emerald-50 border-emerald-200";
-  let ringColor = "stroke-emerald-600";
+  let colorClasses = "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
+  let ringColor = "stroke-emerald-500";
   let labelText = "Statutory Compliance Met";
 
   if (rounded < 60) {
-    colorClasses = "text-rose-700 bg-rose-50 border-rose-200";
-    ringColor = "stroke-rose-600";
+    colorClasses = "text-rose-400 bg-rose-500/10 border-rose-500/30";
+    ringColor = "stroke-rose-500";
     labelText = "Legal Notice Trigger / High Risk";
   } else if (rounded < 85) {
-    colorClasses = "text-amber-700 bg-amber-50 border-amber-200";
-    ringColor = "stroke-amber-600";
+    colorClasses = "text-amber-400 bg-amber-500/10 border-amber-500/30";
+    ringColor = "stroke-amber-500";
     labelText = "Requires Inspector Verification";
   }
 
@@ -30,7 +30,7 @@ export const ScoreBadge = ({ score = 100, size = "md", showLabel = true }) => {
               cx="56"
               cy="56"
               r={radius}
-              className="stroke-slate-200"
+              className="stroke-parakh-border"
               strokeWidth="8"
               fill="transparent"
             />
@@ -47,12 +47,12 @@ export const ScoreBadge = ({ score = 100, size = "md", showLabel = true }) => {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-black tracking-tight text-slate-900">{rounded}%</span>
-            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Score</span>
+            <span className="text-2xl font-black tracking-tight text-parakh-text">{rounded}%</span>
+            <span className="text-[10px] font-semibold text-parakh-muted uppercase tracking-wider">Score</span>
           </div>
         </div>
         {showLabel && (
-          <span className="mt-2 text-xs font-semibold text-slate-600">
+          <span className="mt-2 text-xs font-semibold text-parakh-muted">
             {labelText}
           </span>
         )}
@@ -63,7 +63,7 @@ export const ScoreBadge = ({ score = 100, size = "md", showLabel = true }) => {
   return (
     <div className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full border font-bold text-xs ${colorClasses}`}>
       <span>{rounded}%</span>
-      {showLabel && <span className="font-medium text-slate-500">&bull; Score</span>}
+      {showLabel && <span className="font-medium text-slate-400">&bull; Score</span>}
     </div>
   );
 };

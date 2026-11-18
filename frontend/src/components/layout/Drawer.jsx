@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
+import { ThemeToggle } from "../common/ThemeToggle";
+import { AVAILABLE_THEMES, getActiveTheme, applyTheme } from "../../utils/theme";
 import {
   X,
   ShieldCheck,
@@ -19,14 +23,17 @@ import {
   MessageSquare,
   Phone,
   FileQuestion,
+  Shield,
 } from "lucide-react";
 
 export const Drawer = ({ isOpen, onClose, inspector }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const { theme: currentTheme, setMode: handleThemeChange } = useTheme();
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [language, setLanguage] = useState("EN");
-  const [darkMode, setDarkMode] = useState(false);
   const [fontSize, setFontSize] = useState("Normal");
   const [lastSyncedText, setLastSyncedText] = useState("10 mins ago");
 
@@ -34,18 +41,20 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
 
   const coreLinks = [
     { to: "/", label: "Home", icon: Home },
-    { to: "/inspect", label: "Scan & Inspect", icon: Scan },
     { to: "/history", label: "Inspection History", icon: History },
   ];
 
   const systemLinks = [
     { to: "/rules", label: "Compliance Rules (PCR 2011)", icon: BookOpen },
     { to: "/profile", label: "Inspector Profile", icon: User },
+    { to: "/login", label: "Officer Login / Switch", icon: Shield },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm("Do you want to log out of Parakh AI Inspector?")) {
-      window.location.href = "/";
+      onClose();
+      await logout();
+      navigate("/login");
     }
   };
 
@@ -59,34 +68,37 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
         />
 
         {/* Slide-out Drawer Menu */}
-        <div className="relative w-80 max-w-[85vw] bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-left duration-300">
+        <div className="relative w-80 max-w-[85vw] bg-parakh-card text-parakh-text h-full shadow-2xl flex flex-col z-10 border-r border-parakh-border animate-in slide-in-from-left duration-300">
           {/* Drawer Header */}
-          <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div className="p-5 border-b border-parakh-border flex items-center justify-between bg-parakh-card">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+              <div className="w-9 h-9 rounded-xl bg-parakh-primary flex items-center justify-center text-white shadow-md">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <span className="font-bold text-base tracking-tight text-slate-900">
-                  Parakh <span className="text-blue-600">AI</span>
+                <span className="font-bold text-base tracking-tight text-parakh-text">
+                  Parakh <span className="text-parakh-primary">AI</span>
                 </span>
-                <p className="text-[11px] text-slate-500">Legal Metrology Inspector</p>
+                <p className="text-[11px] text-parakh-muted">Legal Metrology Inspector</p>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-              aria-label="Close drawer"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center space-x-1">
+              <ThemeToggle className="w-8 h-8" />
+              <button
+                onClick={onClose}
+                className="p-1.5 rounded-xl text-parakh-muted hover:text-parakh-text hover:bg-parakh-cardHover transition-colors cursor-pointer"
+                aria-label="Close drawer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           {/* Navigation with Grouping: Core vs System */}
           <nav className="p-4 flex-1 space-y-4 overflow-y-auto">
             {/* Group 1: Core Field Inspection */}
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3.5 mb-1.5 block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-parakh-muted px-3.5 mb-1.5 block">
                 CORE ENFORCEMENT
               </span>
               <div className="space-y-1">
@@ -101,11 +113,11 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
                       onClick={onClose}
                       className={`flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                         isActive
-                          ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                          ? "bg-parakh-primary text-white shadow-md"
+                          : "text-parakh-text hover:bg-parakh-cardHover"
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-400"}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-parakh-muted"}`} />
                       <span>{link.label}</span>
                     </Link>
                   );
@@ -113,11 +125,11 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
               </div>
             </div>
 
-            <hr className="border-slate-100 my-2" />
+            <hr className="border-parakh-border my-2" />
 
             {/* Group 2: System & Statutory */}
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3.5 mb-1.5 block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-parakh-muted px-3.5 mb-1.5 block">
                 SYSTEM &amp; STATUTORY
               </span>
               <div className="space-y-1">
@@ -132,11 +144,11 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
                       onClick={onClose}
                       className={`flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                         isActive
-                          ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                          ? "bg-parakh-primary text-white shadow-md"
+                          : "text-parakh-text hover:bg-parakh-cardHover"
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-400"}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-parakh-muted"}`} />
                       <span>{link.label}</span>
                     </Link>
                   );
@@ -144,26 +156,26 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
               </div>
             </div>
 
-            <hr className="border-slate-100 my-2" />
+            <hr className="border-parakh-border my-2" />
 
             {/* Group 3: Preferences & Support */}
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3.5 mb-1.5 block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-parakh-muted px-3.5 mb-1.5 block">
                 PREFERENCES &amp; HELP
               </span>
               <div className="space-y-1">
                 <button
                   onClick={() => setShowSettingsModal(true)}
-                  className="w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                  className="w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl text-sm font-semibold text-parakh-text hover:bg-parakh-cardHover transition-colors"
                 >
-                  <Settings className="w-4 h-4 text-slate-400" />
+                  <Settings className="w-4 h-4 text-parakh-muted" />
                   <span>App Settings</span>
                 </button>
                 <button
                   onClick={() => setShowHelpModal(true)}
-                  className="w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                  className="w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl text-sm font-semibold text-parakh-text hover:bg-parakh-cardHover transition-colors"
                 >
-                  <HelpCircle className="w-4 h-4 text-slate-400" />
+                  <HelpCircle className="w-4 h-4 text-parakh-muted" />
                   <span>Help &amp; Support</span>
                 </button>
               </div>
@@ -171,64 +183,93 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
           </nav>
 
           {/* Sync Status (Bottom Indicator above Profile) */}
-          <div className="px-4 py-2 border-t border-slate-100 bg-slate-50/80 flex items-center justify-between text-xs text-slate-500">
+          <div className="px-4 py-2 border-t border-parakh-border bg-parakh-bg flex items-center justify-between text-xs text-parakh-muted">
             <span className="flex items-center space-x-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>Last Synced: {lastSyncedText}</span>
             </span>
             <button
               onClick={() => setLastSyncedText("Just now")}
-              className="text-blue-600 hover:text-blue-700 font-semibold p-1"
+              className="text-parakh-primary hover:text-parakh-primaryHover font-semibold p-1"
               title="Force Sync Now"
             >
               <RefreshCw className="w-3 h-3" />
             </button>
           </div>
 
-          {/* Inspector Information Card with Logout Button */}
-          <div className="p-4 border-t border-slate-200 bg-slate-100/70">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center space-x-3 min-w-0">
-                <div className="w-9 h-9 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                  RK
+          {/* Inspector Information Card with Logout / Login Button */}
+          <div className="p-4 border-t border-parakh-border bg-parakh-bg">
+            {user ? (
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-3 min-w-0">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shrink-0 shadow-xs ${
+                    user?.role === "supervisor"
+                      ? "bg-amber-600 text-white"
+                      : "bg-parakh-primary text-white"
+                  }`}>
+                    {user?.name
+                      ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+                      : (user?.username || "OF").slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-parakh-text truncate">
+                      {user?.name || user?.username || "Officer"}
+                    </p>
+                    <span className="text-[10px] text-emerald-400 font-semibold flex items-center truncate">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 shrink-0"></span>
+                      {user?.role === "supervisor"
+                        ? `Supervisor • ${user.badge_number || "UP-LM-HQ01"}`
+                        : `On Duty • ${user?.badge_number || "UP-4471"}`}
+                    </span>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-slate-900 truncate">
-                    {inspector?.name || "Rajesh Kumar"}
-                  </p>
-                  <span className="text-[10px] text-emerald-700 font-semibold flex items-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>
-                    On Duty &bull; UP-4471
-                  </span>
-                </div>
-              </div>
 
-              {/* Logout Button */}
-              <button
-                onClick={handleLogout}
-                className="p-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors"
-                title="Log Out"
-                aria-label="Log Out"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
+                {/* Logout Button */}
+                <button
+                  onClick={handleLogout}
+                  className="p-2 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-xl transition-colors"
+                  title="Log Out"
+                  aria-label="Log Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-parakh-card text-parakh-muted flex items-center justify-center font-bold text-xs shrink-0 border border-parakh-border">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-parakh-text truncate">Guest / Not Signed In</p>
+                    <p className="text-[10px] text-parakh-muted truncate">Officer clearance required</p>
+                  </div>
+                </div>
+                <Link
+                  to="/login"
+                  onClick={onClose}
+                  className="px-3 py-1 bg-parakh-primary hover:bg-parakh-primaryHover text-white font-bold text-xs rounded-lg transition-colors shrink-0"
+                >
+                  Sign In
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Settings Modal */}
       {showSettingsModal && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl border border-slate-200">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+          <div className="bg-parakh-card rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl border border-parakh-border text-parakh-text">
+            <div className="flex items-center justify-between pb-3 border-b border-parakh-border">
               <div className="flex items-center space-x-2">
-                <Settings className="w-5 h-5 text-blue-600" />
-                <h3 className="font-bold text-base text-slate-900">App Preferences</h3>
+                <Settings className="w-5 h-5 text-parakh-primary" />
+                <h3 className="font-bold text-base text-parakh-text">App Preferences</h3>
               </div>
               <button
                 onClick={() => setShowSettingsModal(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+                className="p-1.5 text-parakh-muted hover:text-parakh-text rounded-lg"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -236,14 +277,14 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Language</label>
+                <label className="font-bold text-parakh-text block mb-1">Language</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setLanguage("EN")}
                     className={`py-2 px-3 rounded-xl border font-semibold ${
                       language === "EN"
-                        ? "bg-blue-50 border-blue-600 text-blue-700"
-                        : "border-slate-200 text-slate-600"
+                        ? "bg-parakh-primary/20 border-parakh-primary text-parakh-primary font-bold"
+                        : "border-parakh-border text-parakh-text bg-parakh-bg"
                     }`}
                   >
                     English
@@ -252,8 +293,8 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
                     onClick={() => setLanguage("HI")}
                     className={`py-2 px-3 rounded-xl border font-semibold ${
                       language === "HI"
-                        ? "bg-blue-50 border-blue-600 text-blue-700"
-                        : "border-slate-200 text-slate-600"
+                        ? "bg-parakh-primary/20 border-parakh-primary text-parakh-primary font-bold"
+                        : "border-parakh-border text-parakh-text bg-parakh-bg"
                     }`}
                   >
                     हिन्दी (Kanpur)
@@ -262,21 +303,44 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Theme</label>
-                <button
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="w-full py-2 px-3 rounded-xl border border-slate-200 font-semibold text-slate-700 flex items-center justify-between"
-                >
-                  <span className="flex items-center space-x-2">
-                    {darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                    <span>{darkMode ? "Dark Mode" : "Light Mode (Default)"}</span>
-                  </span>
-                  <span className="text-[10px] text-slate-400">Toggle</span>
-                </button>
+                <label className="font-bold text-parakh-text block mb-1">Color Theme</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleThemeChange("blue-grey-white")}
+                    className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                      currentTheme !== "dark"
+                        ? "border-parakh-primary bg-parakh-primary/10 text-parakh-primary font-bold shadow-xs"
+                        : "border-parakh-border bg-parakh-bg text-parakh-text hover:bg-parakh-cardHover"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Sun className="w-4 h-4 text-parakh-text" strokeWidth={1.8} fill="none" />
+                      <span className="text-xs">Light</span>
+                    </div>
+                    {currentTheme !== "dark" && <Check className="w-3.5 h-3.5 text-parakh-primary shrink-0" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleThemeChange("dark")}
+                    className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                      currentTheme === "dark"
+                        ? "border-parakh-primary bg-parakh-primary/10 text-parakh-primary font-bold shadow-xs"
+                        : "border-parakh-border bg-parakh-bg text-parakh-text hover:bg-parakh-cardHover"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Moon className="w-4 h-4 text-parakh-text" strokeWidth={1.8} fill="none" />
+                      <span className="text-xs">Dark</span>
+                    </div>
+                    {currentTheme === "dark" && <Check className="w-3.5 h-3.5 text-parakh-primary shrink-0" />}
+                  </button>
+                </div>
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Font Size</label>
+                <label className="font-bold text-parakh-text block mb-1">Font Size</label>
                 <div className="grid grid-cols-3 gap-2">
                   {["Small", "Normal", "Large"].map((size) => (
                     <button
@@ -284,8 +348,8 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
                       onClick={() => setFontSize(size)}
                       className={`py-1.5 rounded-lg border font-semibold text-[11px] ${
                         fontSize === size
-                          ? "bg-blue-50 border-blue-600 text-blue-700"
-                          : "border-slate-200 text-slate-600"
+                          ? "bg-parakh-primary/20 border-parakh-primary text-parakh-primary font-bold"
+                          : "border-parakh-border text-parakh-text bg-parakh-bg"
                       }`}
                     >
                       {size}
@@ -297,7 +361,7 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
 
             <button
               onClick={() => setShowSettingsModal(false)}
-              className="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-xs hover:bg-blue-700"
+              className="w-full py-2 bg-parakh-primary text-white rounded-xl text-xs font-bold shadow-xs hover:bg-parakh-primaryHover"
             >
               Save Preferences
             </button>
@@ -307,38 +371,38 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
 
       {/* Help & Support Modal */}
       {showHelpModal && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl border border-slate-200">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+          <div className="bg-parakh-card rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl border border-parakh-border text-parakh-text">
+            <div className="flex items-center justify-between pb-3 border-b border-parakh-border">
               <div className="flex items-center space-x-2">
-                <HelpCircle className="w-5 h-5 text-blue-600" />
-                <h3 className="font-bold text-base text-slate-900">Inspector Help &amp; FAQ</h3>
+                <HelpCircle className="w-5 h-5 text-parakh-primary" />
+                <h3 className="font-bold text-base text-parakh-text">Inspector Help &amp; FAQ</h3>
               </div>
               <button
                 onClick={() => setShowHelpModal(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+                className="p-1.5 text-parakh-muted hover:text-parakh-text rounded-lg"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-2.5 text-xs text-slate-600">
-              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                <p className="font-bold text-slate-800">1. How to capture unreadable packages?</p>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+            <div className="space-y-2.5 text-xs text-parakh-text">
+              <div className="p-2.5 rounded-xl bg-parakh-bg border border-parakh-border">
+                <p className="font-bold text-parakh-text">1. How to capture unreadable packages?</p>
+                <p className="text-[11px] text-parakh-muted mt-0.5">
                   Ensure ambient lighting is even. Switch to Demo Location or manual GTIN barcode entry if camera is obstructed.
                 </p>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                <p className="font-bold text-slate-800">2. Legal Notice under Section 36</p>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+              <div className="p-2.5 rounded-xl bg-parakh-bg border border-parakh-border">
+                <p className="font-bold text-parakh-text">2. Legal Notice under Section 36</p>
+                <p className="text-[11px] text-parakh-muted mt-0.5">
                   Use "Escalate &amp; Issue Section 36 Notice" on the Inspection Results page to log confirmed statutory infractions.
                 </p>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200 text-blue-900 flex items-center space-x-2">
-                <Phone className="w-4 h-4 text-blue-600 shrink-0" />
+              <div className="p-2.5 rounded-xl bg-parakh-primary/10 border border-parakh-primary/25 text-parakh-text flex items-center space-x-2">
+                <Phone className="w-4 h-4 text-parakh-primary shrink-0" />
                 <span className="font-medium text-[11px]">
                   Kanpur Legal Metrology IT Desk: +91 94150 12844
                 </span>
@@ -347,7 +411,7 @@ export const Drawer = ({ isOpen, onClose, inspector }) => {
 
             <button
               onClick={() => setShowHelpModal(false)}
-              className="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-xs hover:bg-blue-700"
+              className="w-full py-2 bg-parakh-primary text-white rounded-xl text-xs font-bold shadow-xs hover:bg-parakh-primaryHover"
             >
               Close Help
             </button>

@@ -1,75 +1,128 @@
 /**
  * Centralized API Service for Parakh AI
  * Communicates with Django REST Framework backend at /api/v1/
+ *
+ * Backend Endpoint Verification Status:
+ * - getHealth: VERIFIED (backend/urls.py -> HealthCheckView)
+ * - getReadiness: VERIFIED (backend/urls.py -> ReadinessCheckView)
+ * - getDashboardSummary: UNVERIFIED (Backend app URLs are empty stubs)
+ * - getInspectorProfile: UNVERIFIED (Backend app URLs are empty stubs)
+ * - getInspections: UNVERIFIED (Backend app URLs are empty stubs)
+ * - getInspection: UNVERIFIED (Backend app URLs are empty stubs)
+ * - reviewInspection: UNVERIFIED (Backend app URLs are empty stubs)
+ * - analyzeInspection: UNVERIFIED (Backend app URLs are empty stubs)
+ * - getInspectionEvidence: UNVERIFIED (Backend app URLs are empty stubs)
+ * - getComplianceRules: UNVERIFIED (Backend app URLs are empty stubs)
+ * - getWeeklyAnalytics: UNVERIFIED (Backend app URLs are empty stubs)
+ * - getLocationAnalytics: UNVERIFIED (Backend app URLs are empty stubs)
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api/v1";
+import { api as axiosClient } from "../lib/api";
 
-async function request(endpoint, options = {}) {
-  const url = `${API_BASE}${endpoint}`;
-  const headers = {
-    Accept: "application/json",
-    ...options.headers,
-  };
-
-  const response = await fetch(url, { ...options, headers });
-  if (!response.ok) {
-    let errorDetail = "API Request failed";
-    try {
-      const errorJson = await response.json();
-      errorDetail = errorJson?.error?.message || errorJson?.detail || JSON.stringify(errorJson);
-    } catch {
-      errorDetail = `${response.status} ${response.statusText}`;
-    }
-    throw new Error(errorDetail);
-  }
-  return response.json();
-}
+const API_V1_PREFIX = "";
 
 export const api = {
-  // System Health
-  getHealth: () => request("/health/"),
-  getReadiness: () => request("/ready/"),
-
-  // Dashboard
-  getDashboardSummary: () => request("/dashboard/summary/"),
-
-  // Inspector
-  getInspectorProfile: () => request("/inspector/profile/"),
-
-  // Inspections
-  getInspections: (params = {}) => {
-    const query = new URLSearchParams();
-    if (params.compliance_status) query.append("compliance_status", params.compliance_status);
-    if (params.category) query.append("category", params.category);
-    if (params.review_status) query.append("review_status", params.review_status);
-    if (params.search) query.append("search", params.search);
-    if (params.page) query.append("page", params.page.toString());
-    const queryString = query.toString() ? `?${query.toString()}` : "";
-    return request(`/inspections/${queryString}`);
+  // --- VERIFIED SYSTEM PROBES ---
+  /**
+   * System Health Liveness Probe (VERIFIED)
+   */
+  getHealth: async () => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/health/`);
+    return res.data;
   },
 
-  getInspection: (id) => request(`/inspections/${id}/`),
+  /**
+   * Database Readiness Probe (VERIFIED)
+   */
+  getReadiness: async () => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/ready/`);
+    return res.data;
+  },
 
-  reviewInspection: (id, data) =>
-    request(`/inspections/${id}/review/`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }),
+  // --- UNVERIFIED BUSINESS ENDPOINTS (Pending Backend App URLs) ---
+  /**
+   * Aggregate Dashboard Summary (UNVERIFIED)
+   */
+  getDashboardSummary: async () => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/dashboard/summary/`);
+    return res.data;
+  },
 
-  analyzeInspection: (formData) =>
-    request("/inspections/analyze/", {
-      method: "POST",
-      body: formData,
-    }),
+  /**
+   * Current Inspector / Officer Profile (UNVERIFIED)
+   */
+  getInspectorProfile: async () => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/inspector/profile/`);
+    return res.data;
+  },
 
-  getInspectionEvidence: (id) => request(`/inspections/${id}/evidence/`),
+  /**
+   * Paginated Field Inspections (UNVERIFIED)
+   */
+  getInspections: async (params = {}) => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/inspections/`, { params });
+    return res.data;
+  },
 
-  // Statutory Rules
-  getComplianceRules: () => request("/rules/"),
+  /**
+   * Inspection Details by ID (UNVERIFIED)
+   */
+  getInspection: async (id) => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/inspections/${id}/`);
+    return res.data;
+  },
 
-  // Analytics
-  getWeeklyAnalytics: () => request("/analytics/weekly/"),
-  getLocationAnalytics: () => request("/analytics/locations/"),
+  /**
+   * Patch Inspection Review Status (UNVERIFIED)
+   */
+  reviewInspection: async (id, data) => {
+    const res = await axiosClient.patch(`${API_V1_PREFIX}/inspections/${id}/review/`, data);
+    return res.data;
+  },
+
+  /**
+   * Upload & OCR Analyze Packaged Commodity (UNVERIFIED)
+   */
+  analyzeInspection: async (formData) => {
+    const res = await axiosClient.post(`${API_V1_PREFIX}/inspections/analyze/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  },
+
+  /**
+   * Inspection Evidence Coordinates & Image (UNVERIFIED)
+   */
+  getInspectionEvidence: async (id) => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/inspections/${id}/evidence/`);
+    return res.data;
+  },
+
+  /**
+   * PCR 2011 Statutory Compliance Rules (UNVERIFIED)
+   */
+  getComplianceRules: async () => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/rules/`);
+    return res.data;
+  },
+
+  /**
+   * Weekly Analytics Trends (UNVERIFIED)
+   */
+  getWeeklyAnalytics: async () => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/analytics/weekly/`);
+    return res.data;
+  },
+
+  /**
+   * Geolocation Inspection Mapping Analytics (UNVERIFIED)
+   */
+  getLocationAnalytics: async () => {
+    const res = await axiosClient.get(`${API_V1_PREFIX}/analytics/locations/`);
+    return res.data;
+  },
 };
+
+export default api;

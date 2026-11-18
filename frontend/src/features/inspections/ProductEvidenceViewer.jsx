@@ -60,11 +60,11 @@ export const ProductEvidenceViewer = ({
   const regionCount = annotatedFields.length || 4;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col">
+    <div className="bg-parakh-card rounded-2xl border border-parakh-border shadow-xs overflow-hidden flex flex-col">
       {/* Evidence Image Container with Letterbox-Aware SVG Overlay */}
       <div
         ref={containerRef}
-        className="relative bg-[#f8fafc] flex items-center justify-center min-h-[360px] sm:min-h-[420px] max-h-[500px] overflow-hidden p-3"
+        className="relative bg-parakh-bg flex items-center justify-center min-h-[360px] sm:min-h-[420px] max-h-[500px] overflow-hidden p-3"
       >
         {/* Top Floating Badge matching Screenshot 5 */}
         <div className="absolute top-4 left-4 z-20">
@@ -172,26 +172,26 @@ export const ProductEvidenceViewer = ({
       </div>
 
       {/* Controls & Legend matching Screenshot 5 */}
-      <div className="p-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-white">
+      <div className="p-4 border-t border-parakh-border flex flex-wrap items-center justify-between gap-3 bg-parakh-card">
         <button
           onClick={() => setShowEvidence(!showEvidence)}
-          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors shadow-xs"
+          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl border border-parakh-border hover:bg-parakh-cardHover text-xs font-semibold text-parakh-text transition-colors shadow-xs"
         >
           {showEvidence ? (
             <>
-              <EyeOff className="w-3.5 h-3.5 text-slate-500" />
+              <EyeOff className="w-3.5 h-3.5 text-parakh-muted" />
               <span>Hide Evidence</span>
             </>
           ) : (
             <>
-              <Eye className="w-3.5 h-3.5 text-blue-600" />
+              <Eye className="w-3.5 h-3.5 text-parakh-primary" />
               <span>Show Evidence</span>
             </>
           )}
         </button>
 
         {/* Legend */}
-        <div className="flex items-center space-x-4 text-xs font-medium text-slate-600">
+        <div className="flex items-center space-x-4 text-xs font-medium text-parakh-muted">
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             <span>Pass</span>
@@ -207,14 +207,14 @@ export const ProductEvidenceViewer = ({
         </div>
       </div>
 
-      {/* Alert Banner matching Screenshot 5 */}
+      {/* Alert Banner */}
       {violationCount > 0 ? (
-        <div className="mx-4 mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-center space-x-2 text-xs font-semibold">
+        <div className="mx-4 mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 flex items-center space-x-2 text-xs font-semibold">
           <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
           <span>AI detected {violationCount} potential statutory violations</span>
         </div>
       ) : (
-        <div className="mx-4 mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center space-x-2 text-xs font-semibold">
+        <div className="mx-4 mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center space-x-2 text-xs font-semibold">
           <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>All applicable statutory packaged commodity declarations verified</span>
         </div>

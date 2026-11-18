@@ -97,16 +97,16 @@ export const RulesPage = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div className="bg-parakh-card p-6 rounded-2xl border border-parakh-border shadow-xs flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-black text-parakh-text tracking-tight">
             Statutory Legal Metrology Rules
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-parakh-muted mt-1">
             Rules, statutory provisions, and penalty clauses under Legal Metrology (Packaged Commodities) Rules, 2011
           </p>
         </div>
-        <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+        <div className="w-12 h-12 rounded-2xl bg-parakh-primary/15 border border-parakh-primary/25 text-parakh-primary flex items-center justify-center shrink-0">
           <Scale className="w-6 h-6" />
         </div>
       </div>
@@ -115,31 +115,31 @@ export const RulesPage = () => {
         {displayRules.map((r) => (
           <div
             key={r.rule_id}
-            className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-2.5 flex flex-col justify-between"
+            className="bg-parakh-card p-5 rounded-2xl border border-parakh-border shadow-xs space-y-2.5 flex flex-col justify-between hover:border-parakh-primary/40 transition-all"
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                <span className="font-mono text-xs font-bold text-parakh-primary bg-parakh-primary/15 px-2.5 py-0.5 rounded-full border border-parakh-primary/25">
                   {r.rule_id}
                 </span>
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                     r.severity === "CRITICAL"
-                      ? "bg-rose-50 text-rose-700 border border-rose-200"
-                      : "bg-blue-50 text-blue-700 border border-blue-200"
+                      ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                      : "bg-parakh-primary/15 text-parakh-primary border border-parakh-primary/25"
                   }`}
                 >
                   {r.severity}
                 </span>
               </div>
-              <h3 className="text-sm font-bold text-slate-900">{r.title}</h3>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">{r.requirement}</p>
+              <h3 className="text-sm font-bold text-parakh-text">{r.title}</h3>
+              <p className="text-xs text-parakh-muted mt-1 leading-relaxed">{r.requirement}</p>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
-              <p className="font-medium text-slate-700">{r.legal_reference}</p>
+            <div className="pt-3 border-t border-parakh-border text-[11px] text-slate-400 space-y-1">
+              <p className="font-medium text-parakh-muted">{r.legal_reference}</p>
               {r.penalty_clause && (
-                <p className="text-rose-600 font-semibold">{r.penalty_clause}</p>
+                <p className="text-rose-400 font-semibold">{r.penalty_clause}</p>
               )}
             </div>
           </div>

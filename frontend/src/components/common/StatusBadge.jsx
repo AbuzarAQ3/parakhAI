@@ -15,9 +15,9 @@ export const StatusBadge = ({ status = "COMPLIANT", className = "", size = "md" 
     case "PASS":
       return (
         <span
-          className={`inline-flex items-center space-x-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
+          className={`inline-flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
         >
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
           <span>Compliant</span>
         </span>
       );
@@ -27,9 +27,9 @@ export const StatusBadge = ({ status = "COMPLIANT", className = "", size = "md" 
     case "VIOLATION":
       return (
         <span
-          className={`inline-flex items-center space-x-1.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
+          className={`inline-flex items-center space-x-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/25 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
         >
-          <XCircle className="w-3.5 h-3.5 text-rose-600" />
+          <XCircle className="w-3.5 h-3.5 text-rose-400" />
           <span>Violation</span>
         </span>
       );
@@ -38,9 +38,9 @@ export const StatusBadge = ({ status = "COMPLIANT", className = "", size = "md" 
     case "WARNING":
       return (
         <span
-          className={`inline-flex items-center space-x-1.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
+          className={`inline-flex items-center space-x-1.5 bg-amber-500/10 text-amber-400 border border-amber-500/25 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
         >
-          <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+          <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
           <span>Warning</span>
         </span>
       );
@@ -51,9 +51,9 @@ export const StatusBadge = ({ status = "COMPLIANT", className = "", size = "md" 
     case "PENDING_REVIEW":
       return (
         <span
-          className={`inline-flex items-center space-x-1.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
+          className={`inline-flex items-center space-x-1.5 bg-amber-500/10 text-amber-400 border border-amber-500/25 rounded-full tracking-wide uppercase ${sizeClasses} ${className}`}
         >
-          <Clock className="w-3.5 h-3.5 text-amber-600" />
+          <Clock className="w-3.5 h-3.5 text-amber-400" />
           <span>Pending Review</span>
         </span>
       );
@@ -61,7 +61,7 @@ export const StatusBadge = ({ status = "COMPLIANT", className = "", size = "md" 
     default:
       return (
         <span
-          className={`inline-flex items-center space-x-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-full ${sizeClasses} ${className}`}
+          className={`inline-flex items-center space-x-1.5 bg-parakh-card text-parakh-text border border-parakh-border rounded-full ${sizeClasses} ${className}`}
         >
           <span>{status}</span>
         </span>
